@@ -1,7 +1,6 @@
 <template>
     <div class="app">
-        <h2>кол-во {{ this.sequence.length }}</h2>
-        <h2>количество кликов{{ this.clickNumber }}</h2>
+        
         <div class="cubes">
             <button 
                 v-for="btn of btns"
@@ -12,14 +11,18 @@
                 :key="btn">
             </button>
         </div>
-        <button class="startBtn" @click="start">
+        <div class="gameInfo">
+            <h2 class="title">Раунд {{ this.sequence.length }}</h2>
+        <button class="startBtn" @click="start"  :disabled="!isDisabled()">
             START
         </button>
+        <h2 class="title">Выберите сложность</h2>
         <div class="levels">
             <div v-for="el of Object.entries(levels)" :key="el[0]">
-                <label :for='el[0]'>{{ el[0] }}</label>
-                <input :checked="activeLevel == el[1]" @change="toggleChecked(el[1])" type="checkbox" :id="el[0]"/>
+                <input class="checkbox" :checked="activeLevel == el[1]" @change="toggleChecked(el[1])" type="checkbox" :id="el[0]"/>
+                <label class="label" :for='el[0]'>{{ el[0] }}</label>
             </div>
+        </div>
         </div>
     </div>
 </template>   
@@ -56,7 +59,10 @@ export default {
         },
 
         async start() {  
-            this.sequence = [...this.sequence,this.getRandomNumber(1,4)];
+            let randomNumber = this.getRandomNumber(1,4)
+            console.log(randomNumber);
+            
+            this.sequence = [...this.sequence,randomNumber];
  
             for(let el of this.sequence){
                 let sound = new Audio(`/sounds/${el}.mp3`);          
@@ -125,9 +131,45 @@ export default {
 }
 
 .app {
-    margin-left: 30px;
+    /* margin-left: 30px; */
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.gameInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.title {
+    font-size: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333333;
+}
+.levels {
+    display: flex;
+    gap: 10px;
+    /* flex-direction: column; */
 }
 
+.checkbox {
+    display: none;
+}
+
+.label {
+    color: white;
+    font-size: 20px;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 20px;
+    background: #BEDE15;
+}
+
+.checkbox:checked + .label {
+    background: green;
+}
 .cubes {
     display: flex;
     flex-direction: row;
@@ -208,7 +250,16 @@ export default {
     cursor: pointer;
 }
 
-
+@media (max-width:500px) {
+    .cubes {
+        width: 300px;
+        height: 300px;
+    }
+    .cub {
+        width: 50%;
+        height: 50%;
+    }
+}
 
 
 </style>
