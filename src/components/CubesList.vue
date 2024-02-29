@@ -91,7 +91,7 @@
     
 }
 @media (max-width:500px) {
-    .cubes {
+    .cubes-list {
         width: 300px;
         height: 300px;
     }
